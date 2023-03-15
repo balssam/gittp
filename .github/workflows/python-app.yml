@@ -5,6 +5,7 @@ on: push
 jobs:
   tests:
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
 
     strategy:
       matrix:
@@ -27,3 +28,21 @@ jobs:
         run: |
           pip install pytest
           python -m pytest
+          
+      - name: Install Pylint
+        run: pip install pylint
+        
+      - name: Run Pylint
+        run: pylint addition.py
+          
+      - name: Slack Notification
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+          text: 'successfully tested'
+          channel: '#projetgit'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}   
+ 
+    
