@@ -29,6 +29,9 @@ jobs:
           pip install pytest
           python -m pytest
           
+      - name: Install Pylint
+        run: pip install pylint   
+          
       - name: Slack Notification
         uses: 8398a7/action-slack@v3
         with:
